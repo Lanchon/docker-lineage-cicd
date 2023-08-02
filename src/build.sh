@@ -210,6 +210,10 @@ for branch in ${BRANCH_NAME//,/ }; do
     # If needed, include microG's components
     #sed -i 's/$(WITH_GMS)/$(WITH_GMS)$(WITH_MICROG)/g' "vendor/$vendor/config/partner_gms.mk"
     sed -i 's/ifeq ($(WITH_GMS),true)/ifneq ($(filter true,$(WITH_GMS) $(WITH_MICROG)),)/g' "vendor/$vendor/config/partner_gms.mk"
+    if [ "$WITH_GMS" = "true" ]; then
+      echo ">> [$(date)] WARNING: WITH_GMS is deprecated in favor of WITH_MICROG"
+      echo ">> [$(date)] see: https://github.com/lineageos4microg/docker-lineage-cicd/issues/358"
+    fi
 
     # If needed, apply the microG's signature spoofing patch
     if [ "$SIGNATURE_SPOOFING" = "yes" ] || [ "$SIGNATURE_SPOOFING" = "restricted" ]; then
