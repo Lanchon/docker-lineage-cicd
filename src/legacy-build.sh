@@ -284,6 +284,16 @@ for branch in ${BRANCH_NAME//,/ }; do
     los_ver_minor=$(sed -n -e 's/^\s*PRODUCT_VERSION_MINOR = //p' "$makefile_containing_version")
     los_ver="$los_ver_major.$los_ver_minor"
 
+    # If needed, include microG's components while providing free space for add-ons in system
+    if [ "$WITH_GMS_ALT" = true ]; then
+      if [ "$WITH_GMS" = true ]; then
+        echo ">> [$(date)] ERROR: WITH_GMS and WITH_GMS_ALT cannot be both true"
+        exit 1
+      else
+        echo '$(call inherit-product, vendor/partner_gms/products/gms.mk)' > "vendor/$vendor/config/partner_gms.mk"
+      fi
+    fi
+
     patches_applied=false
     if [ "$APPLY_PATCHES" = true ]; then
 
